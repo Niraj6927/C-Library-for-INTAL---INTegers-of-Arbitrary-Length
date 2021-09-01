@@ -494,6 +494,67 @@ intal* divide_intal(intal* a, intal* b){
 
 }
 
+intal* exponent(intal* a,intal* n){
+	intal* den=create_intal();
+	intal* temp=create_intal();
+	intal* z=create_intal();
+	intal* fp=create_intal();intal* p=create_intal();
+	int n_len=strlen(n->s);
+	char last_char=n->s[n_len-1];
+	int max=strlen(n->s);
+	z->s=(char*)malloc(100+max+3);
+	z->s="+1";
+	z=padding(z,max-1);
+	
+	read_intal(den,"+2");
+	if(strcmp(n->s,z->s)==0){
+		return a;
+	}
+	n=divide_intal(n,den);
+	temp=exponent(a,n);
+	fp=multiply_intal(temp,temp);
+	
+	if(last_char=='1'||last_char=='3'||last_char=='5'||last_char=='7'||last_char=='9'){
+		p=multiply_intal(a,fp);
+		return p;
+	}
+	delete_intal(&den);delete_intal(&temp);delete_intal(&z);delete_intal(&p);
+	return fp; 
+}
+
+intal* brute_exponent(intal* a,intal* n)
+{
+	int max=strlen(n->s);	
+	intal* z = create_intal();
+	intal* p = create_intal();
+	intal* fp = create_intal();
+	read_intal(p,a->s);
+	intal* constant = create_intal();
+	read_intal(constant,"1");
+
+	z->s=(char*)malloc(100+max+3);
+	z->s="+1";
+	z=padding(z,max);
+
+	while(strcmp(n->s+1,z->s+1)>0){
+		intal*fn=create_intal();
+		fn=subtract_intal(n,constant);
+		delete_intal(&n);
+		n=create_intal();
+		read_intal(n,fn->s);
+		delete_intal(&fn);
+		fp = create_intal();
+		fp=multiply_intal(p,a);
+		delete_intal(&p);
+		p=create_intal();
+		read_intal(p,fp->s);
+		delete_intal(&fp);
+	}
+
+	delete_intal(&constant);delete_intal(&z);
+	return p;
+}
+
 // Finds a^b, which a to the power of b and returns the result. 
 // The result could be undefined if the intal b is negative.
 // Parameters a and b are not modified. The result is a new intal.
